@@ -1,0 +1,34 @@
+#!/bin/bash
+#convert a file.sh and file.inp pair into new_file.sh and new_file.inp and makes the corresponding changes to new_file.sh
+#usage: 'newcalc new_file'
+#delimiter is '@', so filename can't contain the character '@'
+
+shopt -s nullglob
+
+foo=$1 #sets foo to the first command line argument
+
+if [[ $# -eq 0 ]] ; then
+	echo 'you must supply an input argument'
+	exit 1
+fi
+
+for i in *.sh;
+do mv $i $foo.sh
+done
+
+for i in *.inp;
+do mv $i $foo.inp
+done
+
+for i in *.sh;
+do sed -i "s@#SBATCH --output=.*@#SBATCH --output=$foo.out@" $i
+done
+
+for i in *.sh
+do sed -i "s@orca .*.inp@orca $foo.inp@" $i 
+done
+
+for i in *.sh
+do sed -i "s@> .*.out@> $foo.out@" $i 
+done
+

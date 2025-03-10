@@ -1,0 +1,45 @@
+#!/bin/bash
+
+#This is a script to load ASH on ComputeCanada: https://ash.readthedocs.io/en/latest/setup.html
+
+#All of this is going in the submission script now
+####################################################################
+#must install geometric: https://github.com/leeping/geomeTRIC
+#pip3 install geometric
+
+#must install PyJulia: https://pyjulia.readthedocs.io/en/latest/installation.html
+#python3 -m pip install --user julia
+#python #i.e., start a python REPL
+#import julia
+#julia.install()
+#alternatively, "pip3 install julia"
+####################################################################
+
+#might have to install PySCF: "pip3 install pyscf"
+#might have to install PyFrame: "pip3 install pyframe"
+
+#load external programs
+#load dependencies for ORCA 4.2.1
+module load nixpkgs/16.09
+module load gcc/7.3.0
+module load openmpi/3.1.4
+#load ORCA 4.2.1
+module load orca/4.2.0
+#load xTB 6.4.0
+module load StdEnv/2020
+module load gcc/9.3.0
+module load xtb/6.4.0
+
+#load dependencies for ASH
+#load dependencies for openmm 7.6.0
+module load StdEnv/2020
+module load gcc/9.3.0
+module load cuda/11.4
+module load openmpi/4.0.3
+module load intel/2020.1.217
+#load openmm 7.6.0
+module load openmm/7.6.0
+#load julia 1.6.2
+module load julia/1.6.2
+
+

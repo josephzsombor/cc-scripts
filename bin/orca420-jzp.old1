@@ -1,0 +1,7 @@
+#!/bin/bash
+cp /home/josephzp/bin/orca420-ragnarr.sh .
+
+jobname=$1
+
+sbatch -J $jobname ./orca420-ragnarr.sh 
+

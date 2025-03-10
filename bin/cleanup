@@ -1,0 +1,7 @@
+#!/bin/bash
+#delete all files in working directory except *.inp, *.xyz, *.sh, and *.cmp
+
+shopt -s extglob
+
+yes | rm -i !(*.inp|*.xyz|*.sh|*.cmp) 2> /dev/null
+echo "deleted all files except *.inp, *.xyz, and *.sh"
