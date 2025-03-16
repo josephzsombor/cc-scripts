@@ -12,6 +12,11 @@ usage() {
     echo
     echo "  basename    The base name of the output files (excluding %HFX values or .out extensions)."
     echo
+    echo "Output CSV format:"
+    echo "  -hfx mode   %HFX,Spin,NO,OCC,E(Eh),E(eV)"
+    echo "  no -hfx     Spin,NO,OCC,E(Eh),E(eV)"
+    echo "  Spin: 0 = up, 1 = down"
+    echo
     echo "Examples:"
     echo "  $0 -hfx calculation-hfx    # loops over HFX values and extracts"
     echo "  $0 calculation             # extracts from a single output file"
@@ -46,7 +51,7 @@ if [[ -z "$basename" ]]; then
     usage
 fi
 
-# Define output CSV file based on mode
+#Define output CSV file based on mode
 if [[ $hfx_mode -eq 1 ]]; then
     csvfile="${basename}_orbital_energies.csv"
     echo "%HFX,Spin,NO,OCC,E(Eh),E(eV)" > "$csvfile"
@@ -61,18 +66,18 @@ extract_orbitals() {
     local hfx_value="$2"
 
     awk -v hfx="$hfx_value" -v hfx_mode="$hfx_mode" '
-        BEGIN { spin=""; capture=0 }
+        BEGIN { spin=""; spin_code=""; capture=0 }
         /ORBITAL ENERGIES/ { capture=1; next }
-        /SPIN UP ORBITALS/ { spin="up"; next }
-        /SPIN DOWN ORBITALS/ { spin="down"; next }
+        /SPIN UP ORBITALS/ { spin="up"; spin_code=0; next }
+        /SPIN DOWN ORBITALS/ { spin="down"; spin_code=1; next }
         /MOLECULAR ORBITALS/ { exit }
         capture && NF >= 4 {
             no=$1; occ=$2; e_eh=$3; e_ev=$4;
             if (no ~ /^[0-9]+$/ && occ ~ /^[0-9.]+$/ && e_eh ~ /^-?[0-9.]+$/ && e_ev ~ /^-?[0-9.]+$/) {
                 if (hfx_mode == 1)
-                    print hfx "," spin "," no "," occ "," e_eh "," e_ev
+                    print hfx "," spin_code "," no "," occ "," e_eh "," e_ev
                 else
-                    print spin "," no "," occ "," e_eh "," e_ev
+                    print spin_code "," no "," occ "," e_eh "," e_ev
             }
         }
     ' "$file" >> "$csvfile"
