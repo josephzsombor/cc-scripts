@@ -1,0 +1,12 @@
+#!/bin/bash
+
+# Directory containing the .inp files (default: current directory)
+DIR="${1:-.}"
+
+# Loop through all .inp files in the directory
+for file in "$DIR"/*.inp; do
+    if [[ -f "$file" ]]; then
+        echo "Submitting $file..."
+        sbatch -J "$(basename "$file")" "$HOME/bin/orca_sub.sh" "$file"
+    fi
+done
