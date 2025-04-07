@@ -6,8 +6,10 @@ DIR="${1:-.}"
 # Loop through all .inp files in the directory
 for file in "$DIR"/*.inp; do
     if [[ -f "$file" ]]; then
-        base=$(basename "$file")
+        base="${file##*/}"       # Strip path
+        base="${base%.inp}"      # Strip .inp extension
         echo "Submitting $base..."
         sbatch -J "$base" "$HOME/bin/orca_sub.sh" "$base"
     fi
 done
+
